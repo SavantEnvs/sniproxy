@@ -1,0 +1,42 @@
+# Config loaded from mayhem/test-data/routes.conf
+
+username daemon
+
+pidfile sniproxy-test.pid
+
+resolver {
+	nameserver 192.0.2.53
+	nameserver [2001:db8::53]
+	search example.test
+	mode ipv4_first
+}
+
+listener unix:sniproxy-test.sock {
+	protocol http
+}
+
+listener 127.0.0.1:8443 {
+	protocol tls
+	table routes
+	fallback 127.0.0.1:9443
+	source 192.0.2.99
+}
+
+listener [::1]:8080 {
+	protocol http
+	table routes
+	reuseport on
+}
+
+table {
+	example.org 198.51.100.7
+}
+
+table routes {
+	^example.com$ 192.0.2.10:8001
+	^www.example.(com|net)$ [2001:db8::10]:443 proxy_protocol
+	^local.example.com$ unix:/tmp/backend.sock
+	.wild.test$ *:4443
+	.* *
+}
+

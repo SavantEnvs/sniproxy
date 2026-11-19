@@ -1,0 +1,11 @@
+project: savantenvs/sniproxy
+target: fuzz_tls
+
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/fuzz_tls/testsuite
+
+cmds:
+  - cmd: /mayhem/fuzz_tls
+    libfuzzer: true
+    timeout: 5

@@ -1,0 +1,3 @@
+# Out-of-tree autotools builds made by mayhem/build.sh (configure state + objects).
+/build-fuzz/
+/build-test/

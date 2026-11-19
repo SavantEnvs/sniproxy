@@ -1,0 +1,56 @@
+# Config loaded from sniproxy.conf
+
+username nobody
+
+pidfile /var/run/sniproxy.pid
+
+resolver {
+	nameserver 127.0.0.1
+	search example.com
+	mode ipv6_first
+}
+
+listener unix:/var/run/proxy.sock {
+	protocol http
+}
+
+listener 192.0.2.10:80 {
+	protocol http
+}
+
+listener 0.0.0.0:443 {
+	protocol tls
+	table https_hosts
+}
+
+listener [::]:80 {
+	protocol http
+	table http_hosts
+	fallback localhost:8080
+	source 192.0.2.10
+}
+
+listener [2001:db8::10]:80 {
+	protocol http
+}
+
+listener [::]:443 {
+	protocol tls
+	table https_hosts
+}
+
+table {
+	example.com 192.0.2.10
+	example.net 192.0.2.20
+}
+
+table https_hosts {
+	example.org unix:/var/run/server.sock
+}
+
+table http_hosts {
+	example.com 192.0.2.10:8001
+	example.net 192.0.2.10:8002
+	example.org 192.0.2.10:8003 proxy_protocol
+}
+
